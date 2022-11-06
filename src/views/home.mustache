@@ -7,6 +7,39 @@
         <hr/>
 
         Opa, tudo bem, como vai {{ user.name }}? sua idade é {{ user.age }} anos?
-    </body>
+        <hr/>
+
+        <h2> Meus produtos </h2>
+
+        <ul> 
+            {{#products}}
+                <li> {{ title }} - R$ {{ price }} </li>
+            {{/products}}
+            {{^products}}
+                Não temos produtos hoje para venda!
+            {{/products}}
+
+        </ul>
+        <hr/>
+        <h2> Pordutos apartir de R$ 12.0 </h2>
+
+        <ul> 
+            {{#expensives}}
+                <li> {{ title }} - R$ {{ price }} </li>
+            {{/expensives}}
+
+        </ul>
+
+
+
+        <h2> Qual ano você nasceu? </h2>
+        <form method="POST" action="/idade-resultado"> 
+            <input type="number" name="ano" placeholder="Digite o ano de nascimento" />
+            <input type="submit" value="Enviar" />
+        </form>
+
+        {{#mostrarIdade}}
+            Você tem {{idade}} anos.
+        {{/mostrarIdade}}
 
  </html>
