@@ -5,6 +5,42 @@ import { User } from '../models/User';
 import { Op } from 'sequelize';
 
 export const home = async ( req: Request, res: Response ) => {
+        //formas de encontrar o usuário
+        let usuarios = await User.findOne ({
+            where: {
+                id: 1
+            }
+        });
+
+        // let usuario = await User.findByPk(1);25  //encontra pela Primary Key
+
+        //Ache ou crie o usuário
+        /* const [ usuario, created ] = await User.findOrCreate ({
+            where: { name: 'Bonieky' },
+            defaults: {
+                name: 'Bonieky',
+                age: 80
+            }
+        });*/
+
+        //achar o usuário e deletar ele
+        let results = await User.findAll({ where: { name: 'Ciclano' }});
+        if(results.length > 0) {
+            let usuario = results[0];
+
+            await usuario.destroy();
+        }
+
+        //destruir usuários menores de 18
+        await User.destroy({
+            where: {
+                age: {
+                    [Op.lte]: 18
+                }
+            }
+        });
+        
+    
         //update
         await User.update({ name: 'Seu Chico', age: 56 /*age: 18*/}, {
             where:{
