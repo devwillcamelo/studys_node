@@ -1,5 +1,7 @@
+import { unlink } from 'fs/promises';
 import { Request, Response } from "express";
 import { Sequelize } from 'sequelize';
+import sharp from 'sharp';
 import { Phrase } from "../models/Phrase";
 
 
@@ -81,4 +83,45 @@ export const randomPhrase = async ( req: Request, res: Response ) => {
     else {
         res.json({ error: 'Frase não encontrada' });
     }
+}
+
+export const uploadFile = async ( req: Request, res: Response ) => {
+    if(req.file) {
+        const filename = `${req.file.filename}.jpg`;
+
+        await sharp(req.file.path)
+        .resize(500)
+        .toFormat('jpeg')
+        .toFile(`./public/media/${filename}.jpg`);
+
+        await unlink(req.file.path);
+    }
+    else {
+        res.status(400);
+        res.json({ error: 'Arquivo inváliso' });
+    }
+}
+
+export const uploadFiles = async ( req: Request, res: Response ) => {
+
+}
+
+export const uploadList = async ( req: Request, res: Response ) => {
+    // três formas de aceitar e receber o arquivo enviado.
+   
+    /*type UploadTypes = {
+    avatar: Express.Multer.File[],
+    gallery: Express.Multer.File[],
+   }
+   
+   const files = req.files as UploadTypes;*/
+   
+   const files = req.files as {
+        avatar: Express.Multer.File[],
+        gallery: Express.Multer.File[]
+   };
+
+    // esta forma é mais generica
+   //const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
 }
